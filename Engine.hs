@@ -5,14 +5,14 @@ module Engine
 import Data.List
 
 data MaybeFrame = InvalidFrame | Frame { rolls :: [Int], frameScore :: Int, accumulated :: Int } deriving (Show, Read, Eq)
-data Game = Game [MaybeFrame] deriving (Show, Read)
+type Game = [MaybeFrame]
 
 (strike, maxScore) = (10, 10)
 indexForLast = 9
 rollRange = [0..10]
 startingIndex = 1
 emptyAcc = 0
-emptyGame = Game []
+emptyGame = []
 errorValue = -1
 
 play :: [Int] -> String
@@ -20,49 +20,52 @@ play xs
     | not (validateInput xs)    = "Invalid Input\n"
     | not (validateOutput game) = "Processing Error\n"
     | otherwise                 = showResult game startingIndex
-                                    where game = buildGame emptyAcc xs emptyGame
+        where game = buildGame emptyAcc xs emptyGame
 
 score :: [Int] -> Int
 score xs
     | not (validateInput xs)    = errorValue
     | not (validateOutput game) = errorValue
     | otherwise                 = totalScore
-                                    where game       = buildGame emptyAcc xs emptyGame
-                                          totalScore = getTotal game
+        where game       = buildGame emptyAcc xs emptyGame
+              totalScore = getTotal game
 
 
 buildGame :: Int -> [Int] -> Game -> Game
-buildGame _ [] (Game a)        = (Game a)
-buildGame s xs (Game a)
-    | length a == indexForLast = buildGame (getAccumulated lastFrame) [] (Game (a ++ [lastFrame]))
-    | otherwise                = buildGame (getAccumulated newFrame) (drop (frameLength newFrame) xs) (Game (a ++ [newFrame]))
-                                    where newFrame  = buildFrame xs s
-                                          lastFrame = buildLastFrame xs s
+buildGame _ [] a        = a
+buildGame s xs a
+    | length a == indexForLast = buildGame (getAccumulated lastFrame) [] (a ++ [lastFrame])
+    | otherwise = buildGame (getAccumulated newFrame) (removeRolls newFrame xs) (a ++ [newFrame])
+        where newFrame  = buildFrame xs s
+              lastFrame = buildLastFrame xs s
 
 
 buildFrame :: [Int] -> Int -> MaybeFrame
 buildFrame (x:y:z:zs) acc
-    | x == strike         = Frame { rolls = [x], frameScore = threeScore, accumulated = threeScore + acc }
-    | (x + y) == maxScore = Frame { rolls = [x, y], frameScore = threeScore, accumulated = threeScore + acc }
-    | (x + y) < 10        = Frame { rolls = [x, y], frameScore = twoScore, accumulated = twoScore + acc  }
-                                where threeScore = x + y + z
-                                      twoScore   = x + y
+    | x == strike         = newFrame [x] threeScore acc
+    | (x + y) == maxScore = newFrame [x, y] threeScore acc
+    | (x + y) < 10        = newFrame [x, y] twoScore acc
+        where threeScore = x + y + z
+              twoScore   = x + y
 buildFrame _ _            = InvalidFrame
 
 
 buildLastFrame :: [Int] -> Int -> MaybeFrame
 buildLastFrame [x, y, z] acc
-    | ((x == strike) || (x + y) == 10) = Frame { rolls = [x, y, z], frameScore = threeScore, accumulated = threeScore + acc }
-                                            where threeScore = x + y + z
+    | ((x == strike) || (x + y) == 10) = newFrame [x, y, z] threeScore acc
+        where threeScore = x + y + z
 buildLastFrame [x, y] acc
-    | x + y < 10                       = Frame { rolls = [x, y], frameScore = twoScore, accumulated = twoScore + acc  }
-                                            where twoScore = x + y
-buildLastFrame _ _                     = InvalidFrame
+    | x + y < 10 = newFrame [x, y] twoScore acc
+        where twoScore = x + y
+buildLastFrame _ _ = InvalidFrame
 
 
-frameLength :: MaybeFrame -> Int
-frameLength Frame { rolls = x } = length x
-frameLength _                   = errorValue
+newFrame :: [Int] -> Int -> Int -> MaybeFrame
+newFrame rolls score acc = Frame { rolls = rolls, frameScore = score, accumulated = score + acc }
+
+
+removeRolls :: MaybeFrame -> [Int] -> [Int]
+removeRolls (Frame a b c) gameArray = drop (length a) gameArray
 
 
 validateInput :: [Int] -> Bool
@@ -73,10 +76,10 @@ validateInput (x:xs)
 
 
 validateOutput :: Game -> Bool
-validateOutput (Game []) = True
-validateOutput (Game (x:xs))
+validateOutput [] = True
+validateOutput (x:xs)
     | x == InvalidFrame = False
-    | otherwise         = validateOutput (Game xs)
+    | otherwise         = validateOutput xs
 
 
 getRolls :: MaybeFrame -> [Int]
@@ -95,8 +98,8 @@ getAccumulated Frame { accumulated = a } = a
 
 
 showResult :: Game -> Int -> String
-showResult (Game []) _     = ""
-showResult (Game (x:xs)) n = (showFrame x n) ++ (showResult (Game xs) (n+1))
+showResult [] _     = ""
+showResult (x:xs) n = (showFrame x n) ++ showResult xs (n+1)
 
 
 showFrame :: MaybeFrame -> Int -> String
@@ -120,6 +123,6 @@ showAccumulated x = "Accumulated: " ++ show (getAccumulated x) ++ "\n\n"
 
 
 getTotal :: Game -> Int
-getTotal (Game (x:[])) = getAccumulated x
-getTotal (Game (x:xs)) = getTotal (Game xs)
-getTotal _             = errorValue
+getTotal (x:[]) = getAccumulated x
+getTotal (x:xs) = getTotal xs
+getTotal _      = errorValue
