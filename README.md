@@ -31,7 +31,7 @@ Go to src and run:
 Random Bowling:
 -----------------
 
-'RandomBowling' will generate a random input and print its respective output. It receives a "balance" parameter (Int >= 0) that can be used to increase the expected random generated score.
+'RandomBowling' will generate a random input and print its respective output. It receives a "balance" parameter (Int) that can be used to increase the expected random generated score.
 
 
 Go to src and run:
