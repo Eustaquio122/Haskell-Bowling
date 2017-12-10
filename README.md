@@ -8,6 +8,7 @@ A randomizer, that outputs an array with a random and correct score for a game, 
 The implementation of the engine, responsible for validanting, scoring, and outputing the result, is supported by 16 features tests - 10 valid inputs that are adequately score, and 6 invalid inputs that are recognised as such.
 
 
+
 Using the Program
 ===================
 
@@ -31,7 +32,7 @@ Go to src and run:
 Random Bowling:
 -----------------
 
-'RandomBowling' will generate a random input and print its respective output. It receives a "balance" parameter (Int) that can be used to increase the expected random generated score.
+'RandomBowling' will generate a random input and print its respective output. It receives a "balance" parameter (Int) that can be used to increase (>0) or decrease (<0) the expected random generated score (with 0 being neutral).
 
 
 Go to src and run:
