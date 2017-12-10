@@ -5,7 +5,7 @@ An implementation in Haskell, as a first exercise in this language, of a program
 
 A randomizer, that outputs an array with a random and correct score for a game, was further implemented. 
 
-The implementation of the engine, responsible for validanting, scoring, and outputing the result, is supported by 16 features tests - 10 valid inputs that are adequately score, and 6 invalid inputs that are recognised as such.
+The implementation of the engine, responsible for validating, scoring, and outputing the result, is supported by 16 features tests - 10 valid inputs that are adequately scored, and 6 invalid inputs that are recognised as such.
 
 
 
