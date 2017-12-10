@@ -39,7 +39,7 @@ score xs
 
 -- MAIN LOGIC --
 buildGame :: Int -> [Int] -> Game -> Game
-buildGame _ [] a        = a
+buildGame _ [] a = a
 buildGame s xs a
     | length a == indexForLast = buildGame (getAccumulated lastFrame) [] (a ++ [lastFrame])
     | otherwise = buildGame (getAccumulated newFrame) (removeRolls newFrame xs) (a ++ [newFrame])
