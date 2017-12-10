@@ -38,7 +38,8 @@ generateLastFrame b [x, y]
 randomRoll :: Int -> Int -> Int
 randomRoll b x
     | base + balance > x = x
+    | base + balance < 0 = 0
     | otherwise          = base + balance
-    where base = unsafePerformIO (randomRIO (0, x))
+    where base    = unsafePerformIO (randomRIO (0, x))
           balance = unsafePerformIO (randomRIO (0, b))
 
