@@ -51,3 +51,64 @@ Or:
 ```
 > echo [balance] | ./RandomBowling
 ```
+
+
+Sample Output
+===================
+
+
+```
+~/repos/haskell/bowling/src > echo 5 | ./RandomBowling
+Frame 1:
+Rolls: 10
+Frame Score: 20
+Accumulated: 20
+
+Frame 2:
+Rolls: 3, 7
+Frame Score: 10
+Accumulated: 30
+
+Frame 3:
+Rolls: 0, 9
+Frame Score: 9
+Accumulated: 39
+
+Frame 4:
+Rolls: 10
+Frame Score: 24
+Accumulated: 63
+
+Frame 5:
+Rolls: 10
+Frame Score: 20
+Accumulated: 83
+
+Frame 6:
+Rolls: 4, 6
+Frame Score: 20
+Accumulated: 103
+
+Frame 7:
+Rolls: 10
+Frame Score: 20
+Accumulated: 123
+
+Frame 8:
+Rolls: 9, 1
+Frame Score: 14
+Accumulated: 137
+
+Frame 9:
+Rolls: 4, 6
+Frame Score: 11
+Accumulated: 148
+
+Frame 10:
+Rolls: 1, 9, 3
+Frame Score: 13
+Accumulated: 161
+
+Total Score:
+161
+```
